@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
+#define CHAR_RATIO 2.0
 #define PRINT_CHARS " .-=+*x#$&X@"
 #define N_CHARS (sizeof(PRINT_CHARS) - 1)
 #define M_PI 3.14159265358979323846

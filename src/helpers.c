@@ -81,3 +81,91 @@ void free_image(image *image)
     }
     
 }
+
+double* get_pixel(image* image, size_t x, size_t y) {
+    return &image->data[(y * image->width + x) * image->channels];
+}
+
+
+// Sets pixel channel values to those of new_pixel
+void set_pixel(image* image, size_t x, size_t y, const double* new_pixel) {
+    double* pixel = get_pixel(image, x, y);
+    for (size_t c = 0; c < image->channels; c++) {
+        pixel[c] = new_pixel[c];
+    }
+}
+
+void average_pixels(image *image, double *average, size_t x1, size_t x2, size_t y1, size_t y2)
+    {
+        for (size_t c = 0; c < image->channels; c++)
+        {
+            average[c] = 0.0;
+        }
+
+        for (size_t y = y1; y < y2; y++)
+        {
+            for (size_t x = x1; x < x2; x++)
+            {
+                double *pixel = get_pixel(image, x, y);
+                for (size_t c = 0; c < image->channels; c++)
+                {
+                    average[c] += pixel[c];
+                }
+            }
+        }
+
+        double n_pixels = (double)(x2 - x1) * (y2 - y1);
+        for (size_t c = 0; c < image->channels; c++)
+        {
+            average[c] /= n_pixels;
+        }
+    }
+
+image resize_image(image *original, size_t max_width, size_t max_height, double char_ratio)
+{
+    size_t width, height;
+    size_t channels = original->channels;
+
+    size_t new_height = (original->height * max_width) / (original->width * char_ratio);
+
+    if (new_height <= max_height)
+    {
+        height = new_height;
+        width = max_width;
+    }
+    else
+    {
+        width = (original->width * max_height * char_ratio) / (original->height);
+        height = max_height;
+    }
+    double *data = calloc(width * height * channels, sizeof(*data));
+    
+    if (data == NULL)
+    {
+        fprintf(stderr, "Error: Failed to allocate memory for resized image data!\n");
+        return (image) {0}; // Return empty image
+    }
+
+    for (size_t j = 0; j < height; j++)
+    {
+        size_t cord_y1 = (j * original->height) / height;
+        size_t cord_y2 = ((j + 1) * original->height) / height;
+        for (size_t i = 0; i < width; i++)
+        {
+            size_t cord_x1 = (i * original->width) / width;
+            size_t cord_x2 = ((i + 1) * original->width) / width;
+
+            // Average the pixel values in the corresponding region of the original image
+            average_pixels(original, &data[(i + j * width) * channels], cord_x1, cord_x2, cord_y1, cord_y2);
+
+        }
+    }
+
+    return (image) 
+    {
+        .width = width,
+        .height = height,
+        .channels = channels,
+        .data = data
+    };
+}
