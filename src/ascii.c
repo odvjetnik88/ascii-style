@@ -25,8 +25,8 @@ int main (int argc, char *argv[])
             terminal = get_terminal_size();
             terminal_resized = 0;
         }
-    printf ("rows %d\n", terminal.rows);
-    printf ("columns %d\n", terminal.columns);
+        printf ("rows %d\n", terminal.rows);
+        printf ("columns %d\n", terminal.columns);
 
         pause();
     }

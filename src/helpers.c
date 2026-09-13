@@ -71,13 +71,13 @@ image load_image (const char *image_file)
     };
 }
 
-void free_img(image *img)
+void free_image(image *image)
 {
-    if (img && img->data)
+    if (image && image->data)
     {
-        free(img->data);
-        img->data = NULL;
-        img->width = img->height = img->channels = 0;
+        free(image->data);
+        image->data = NULL;
+        image->width = image->height = image->channels = 0;
     }
     
 }

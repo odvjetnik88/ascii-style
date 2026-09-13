@@ -36,6 +36,8 @@ void handle_sigwinch(int sig);
 tsize get_terminal_size(void);
 
 image load_image (const char *image_file);
+void free_image(image *image);
+
 
 
 #endif
