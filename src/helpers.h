@@ -38,6 +38,8 @@ tsize get_terminal_size(void);
 
 image load_image (const char *image_file);
 void free_image(image *image);
+image resize_image(image *original, size_t max_width, size_t max_height, double char_ratio);
+
 
 
 
