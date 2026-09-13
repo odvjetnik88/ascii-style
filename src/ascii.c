@@ -27,6 +27,7 @@ int main (int argc, char *argv[])
         stbi_image_free(original.data);
         return 2;
     }
+#define HELPERS_H
 
     signal(SIGWINCH, handle_sigwinch);
 

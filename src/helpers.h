@@ -1,3 +1,5 @@
+#ifndef HELPERS_H
+#define HELPERS_H
 #include <math.h>
 #include "../include/stb_image.h"
 #include <signal.h>
@@ -32,3 +34,5 @@ typedef struct
 
 void handle_sigwinch(int sig);
 tsize get_terminal_size(void);
+
+#endif
