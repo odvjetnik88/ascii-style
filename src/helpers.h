@@ -1,0 +1,34 @@
+#include <math.h>
+#include "../include/stb_image.h"
+#include <signal.h>
+#include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
+#define PRINT_CHARS " .-=+*x#$&X@"
+#define N_CHARS (sizeof(PRINT_CHARS) - 1)
+#define M_PI 3.14159265358979323846
+
+extern volatile sig_atomic_t terminal_resized;
+
+
+typedef struct
+{
+    int rows;
+    int columns;
+} tsize;
+
+
+typedef struct
+{
+    int width;
+    int height;
+    int channels;
+    unsigned char *data;
+} image;
+
+// Function Protoypes
+
+void handle_sigwinch(int sig);
+tsize get_terminal_size(void);
