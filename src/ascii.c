@@ -2,32 +2,15 @@
 
 int main (int argc, char *argv[])
 {
-    
     if (argc != 2)
     {
         printf("Usage ./ascii [PATH to image]");
         return 1;
     }
+    
+    const char *image_file = argv[1];
 
-    image original;
-
-    char *image_file = argv[1];
-
-    original.data = stbi_load(
-        image_file, 
-        &original.width, 
-        &original.height, 
-        &original.channels, 
-        3
-    );
-
-    if (original.data == NULL)
-    {
-        fprintf(stderr, "Error: %s\n", stbi_failure_reason());
-        stbi_image_free(original.data);
-        return 2;
-    }
-#define HELPERS_H
+    image original = load_image(image_file);
 
     signal(SIGWINCH, handle_sigwinch);
 
