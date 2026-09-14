@@ -88,7 +88,8 @@ double* get_pixel(image* image, size_t x, size_t y) {
 
 
 // Sets pixel channel values to those of new_pixel
-void set_pixel(image* image, size_t x, size_t y, const double* new_pixel) {
+void set_pixel(image* image, size_t x, size_t y, const double* new_pixel) 
+{
     double* pixel = get_pixel(image, x, y);
     for (size_t c = 0; c < image->channels; c++) {
         pixel[c] = new_pixel[c];
@@ -168,4 +169,86 @@ image resize_image(image *original, size_t max_width, size_t max_height, double 
         .channels = channels,
         .data = data
     };
+}
+
+image convert_to_grayscale(image *original)
+{
+    size_t width = original->width;
+    size_t height = original->height;
+    size_t channels = 1; // Grayscale image has 1 channel
+
+    double *data = calloc(width * height * channels, sizeof(*data));
+    
+    if (data == NULL)
+    {
+        fprintf(stderr, "Error: Failed to allocate memory for grayscale image data!\n");
+        return (image) {0}; // Return empty image
+    }
+
+        image gray = {
+        .width = width,
+        .height = height,
+        .channels = channels,
+        .data = data
+    };
+
+    for (size_t j = 0; j < height; j++)
+    {
+        for (size_t i = 0; i < width; i++)
+        {
+            double *pixel = get_pixel(original, i, j);
+            double grayscale;
+            if (original->channels == 1)
+            {
+                grayscale = pixel[0]; // If the original image is already grayscale
+            }
+            else if (original->channels >= 3)
+            {
+                // Convert to grayscale using luminosity method
+                grayscale = 0.299 * pixel[0] + 0.587 * pixel[1] + 0.114 * pixel[2];
+            }
+            else
+            {
+                fprintf(stderr, "Error: Unsupported number of channels in original image! %zu\n", original->channels);
+                free(data);
+                return (image) {0}; // Return empty image
+            }
+
+
+            // Convert to grayscale using luminosity method
+            set_pixel(&gray, i, j, &grayscale);
+        }
+    }
+
+    return gray;
+}
+
+char get_ascii_char(double grayscale)
+{
+    size_t index = (size_t)(grayscale * N_CHARS);
+    if (index >= N_CHARS)
+    {
+        index = N_CHARS - 1;
+    }
+    return PRINT_CHARS[index];
+}
+
+void print_ascii_image(image *img)
+{
+    image grayscale = convert_to_grayscale(img);
+
+    for (size_t y = 0; y < img->height; y++)
+    {
+        for (size_t x = 0; x < img->width; x++)
+        {
+            double *pixel = get_pixel(&grayscale, x, y);
+            
+            double grayscale = pixel[0];
+
+             char ascii_char = get_ascii_char(grayscale);
+             printf("%c", ascii_char);
+        }
+        printf("\n");
+    }
+    free_image(&grayscale);
 }
