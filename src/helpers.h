@@ -37,8 +37,22 @@ void handle_sigwinch(int sig);
 tsize get_terminal_size(void);
 
 image load_image (const char *image_file);
+
 void free_image(image *image);
+
+double *get_pixel(image *image, size_t x, size_t y);
+void set_pixel(image* image, size_t x, size_t y, const double* new_pixel);
+
+void average_pixels(image *image, double *average, size_t x1, size_t x2, size_t y1, size_t y2);
+
 image resize_image(image *original, size_t max_width, size_t max_height, double char_ratio);
+image convert_to_grayscale(image *original);
+
+char get_ascii_char(double grayscale);
+
+void print_ascii_image(image *img);
+
+
 
 
 
