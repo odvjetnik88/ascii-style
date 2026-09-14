@@ -19,13 +19,14 @@ int main (int argc, char *argv[])
     }
 
     signal(SIGWINCH, handle_sigwinch);
+    signal(SIGINT, handle_sigint);
 
     tsize terminal = get_terminal_size();
 
     size_t max_height = terminal.rows;
     size_t max_width = terminal.columns;
 
-    while (1)
+    while (running)
     {
 
         // Main logic here
@@ -39,7 +40,6 @@ int main (int argc, char *argv[])
         
         image resized = resize_image(&original, max_width, max_height, CHAR_RATIO);
         print_ascii_image(&resized);
-        printf("max_width: %zu, max_height: %zu\n", max_width, max_height);
         free_image(&resized);
         pause();
     }

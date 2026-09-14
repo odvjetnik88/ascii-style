@@ -4,12 +4,20 @@
 #include "../include/stb_image.h"
 
 volatile sig_atomic_t terminal_resized = 0;
+volatile sig_atomic_t running = 1;
 
 void handle_sigwinch(int sig)
 {
     (void)sig;
     terminal_resized = 1;
 }
+
+void handle_sigint(int sig)
+{
+    (void)sig;
+    running = 0;
+}
+
 
 tsize get_terminal_size(void)
 {

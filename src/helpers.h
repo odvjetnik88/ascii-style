@@ -15,6 +15,9 @@
 
 extern volatile sig_atomic_t terminal_resized;
 
+extern volatile sig_atomic_t running;
+
+
 
 typedef struct
 {
@@ -34,6 +37,8 @@ typedef struct
 // Function Protoypes
 
 void handle_sigwinch(int sig);
+void handle_sigint(int sig);
+
 tsize get_terminal_size(void);
 
 image load_image (const char *image_file);
